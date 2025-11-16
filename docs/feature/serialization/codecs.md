@@ -47,7 +47,6 @@ The `.transform()` method converts between types during encoding and decoding. T
 
 ```java
 record GameMode(String mode) {}
-
 Codec<GameMode> MODE_CODEC = Codec.STRING.transform(GameMode::new, GameMode::mode);
 Codec<Direction> DIRECTION = Codec.Enum(Direction.class);
 ```
@@ -64,7 +63,7 @@ record ItemData(String name, @Nullable String description) {
     );
 }
 
-ItemData itemData = ItemData.CODEC.decode(Transcoder.JSON, json("{\"name\": \"test\"}")).orElseThrow();
+ItemData itemData = ItemData.CODEC.decode(Transcoder.JSON, JsonParser.parseString("{\"name\": \"test\"}")).orElseThrow();
 ```
 
 Default values are used when the field is missing from the data:
@@ -125,7 +124,7 @@ record Position(double x, double y, double z) {
 record BedwarsMap(String name, Position spawnPosition) {
     static final StructCodec<BedwarsMap> CODEC = StructCodec.struct(
             "name", Codec.STRING, BedwarsMap::name,
-            "spawn_position", Position.CODEC, BedwarsMap::position,
+            "spawn_position", Position.CODEC, BedwarsMap::spawnPosition,
             BedwarsMap::new
     );
 }
@@ -135,23 +134,23 @@ record BedwarsMap(String name, Position spawnPosition) {
 Use `StructCodec.INLINE` to flatten nested fields into the parent object instead of creating a nested map.
 
 ```java
-record Inner(String value) {
+record Inner(String innerValue) {
     static final StructCodec<Inner> CODEC = StructCodec.struct(
-            "value", Codec.STRING, Inner::value,
+            "inner_value", Codec.STRING, Inner::innerValue,
             Inner::new
     );
 }
 
-record Outer(String value, Inner inner) {
+record Outer(String outerValue, Inner inner) {
     static final StructCodec<Outer> CODEC = StructCodec.struct(
-            "value", Codec.STRING, Outer::value,
+            "outer_value", Codec.STRING, Outer::outerValue,
             StructCodec.INLINE, Inner.CODEC, Outer::inner,
             Outer::new
     );
 }
 ```
 
-This produces `{"value": "test", "value": "innerValue"}` instead of `{"value": "test", "inner": {"value": "innerValue"}}`.
+This produces `{"outer_value": "test", "inner_value": "innerValue"}` instead of `{"outer_value": "test", "inner": {"inner_value": "innerValue"}}`.
 
 ## Error Handling
 Codec operations return a `Result<T>` type that represents either success or failure. Use pattern matching to handle both cases, or helper methods like `orElseThrow()` and `orElse()`.
@@ -181,7 +180,7 @@ A transcoder can bridge a codec to multiple different file formats. The two most
 > Both of these libraries are built-in, so you don't have to worry about adding any dependencies to start using them.
 
 ```java
-PlayerData playerData = new PlayerData("mudkip", Rank.OWNER);
+PlayerData playerData = new PlayerData("Steve", 67, null);
 JsonElement json = PlayerData.CODEC.encode(Transcoder.JSON, playerData).orElseThrow();
 BinaryTag nbt = PlayerData.CODEC.encode(Transcoder.NBT, playerData).orElseThrow();
 ```
