@@ -96,6 +96,7 @@ export default defineConfig({
           text: "Feature",
           items: [
             { text: "Adventure", link: "/docs/feature/adventure" },
+            { text: "Dialogs", link: "/docs/feature/dialogs" },
             { text: "Items", link: "/docs/feature/items" },
             {
               text: "Events",
