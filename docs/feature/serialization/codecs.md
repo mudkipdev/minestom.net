@@ -18,29 +18,35 @@ PlayerData decodedData = PlayerData.CODEC.decode(Transcoder.JSON, json).orElseTh
 ```
 
 ## Primitive Codecs
-| Codec                  | Java Type           | Description                              |
-| ---------------------- | ------------------- | ---------------------------------------- |
-| `Codec.BOOLEAN`        | `Boolean`           | Boolean value                            |
-| `Codec.BYTE`           | `Byte`              | 8-bit integer                            |
-| `Codec.SHORT`          | `Short`             | 16-bit integer                           |
-| `Codec.INT`            | `Integer`           | 32-bit integer                           |
-| `Codec.LONG`           | `Long`              | 64-bit integer                           |
-| `Codec.FLOAT`          | `Float`             | 32-bit floating point                    |
-| `Codec.DOUBLE`         | `Double`            | 64-bit floating point                    |
-| `Codec.STRING`         | `String`            | UTF-8 string                             |
-| `Codec.KEY`            | `Key`               | Namespaced key (e.g., `minecraft:stone`) |
-| `Codec.UUID`           | `UUID`              | UUID stored as int array                 |
-| `Codec.UUID_STRING`    | `UUID`              | UUID stored as string                    |
-| `Codec.COMPONENT`      | `Component`         | Adventure text component                 |
-| `Codec.NBT`            | `BinaryTag`         | Any NBT tag                              |
-| `Codec.NBT_COMPOUND`   | `CompoundBinaryTag` | NBT compound tag                         |
-| `Codec.BYTE_ARRAY`     | `byte[]`            | Byte array                               |
-| `Codec.INT_ARRAY`      | `int[]`             | Integer array                            |
-| `Codec.LONG_ARRAY`     | `long[]`            | Long array                               |
-| `Codec.BLOCK_POSITION` | `Point`             | Block coordinates                        |
-| `Codec.VECTOR3D`       | `Point`             | Double precision coordinates             |
+| Codec                   | Java Type           | Description                                                                               |
+| ----------------------- | ------------------- | ----------------------------------------------------------------------------------------- |
+| `Codec.BOOLEAN`         | `Boolean`           | Boolean value                                                                             |
+| `Codec.BYTE`            | `Byte`              | 8-bit integer                                                                             |
+| `Codec.SHORT`           | `Short`             | 16-bit integer                                                                            |
+| `Codec.INT`             | `Integer`           | 32-bit integer                                                                            |
+| `Codec.LONG`            | `Long`              | 64-bit integer                                                                            |
+| `Codec.FLOAT`           | `Float`             | 32-bit floating point                                                                     |
+| `Codec.DOUBLE`          | `Double`            | 64-bit floating point                                                                     |
+| `Codec.STRING`          | `String`            | UTF-8 string                                                                              |
+| `Codec.KEY`             | `Key`               | Namespaced key (e.g., `minecraft:stone`)                                                  |
+| `Codec.UUID`            | `UUID`              | UUID stored as an integer array                                                           |
+| `Codec.UUID_STRING`     | `UUID`              | UUID stored as string                                                                     |
+| `Codec.COMPONENT`       | `Component`         | Adventure text component                                                                  |
+| `Codec.NBT`             | `BinaryTag`         | Any NBT tag                                                                               |
+| `Codec.NBT_COMPOUND`    | `CompoundBinaryTag` | NBT compound tag                                                                          |
+| `Codec.BYTE_ARRAY`      | `byte[]`            | Byte array                                                                                |
+| `Codec.INT_ARRAY`       | `int[]`             | Integer array                                                                             |
+| `Codec.LONG_ARRAY`      | `long[]`            | Long array                                                                                |
+| `Codec.BLOCK_POSITION`  | `Point`             | Block coordinates                                                                         |
+| `Codec.VECTOR3D`        | `Point`             | Double precision coordinates                                                              |
+| `Codec.UNIT`            | `Unit`              | Represents the absence of a value (encodes to an empty object)                            |
+| `Codec.TRI_STATE`       | `TriState`          | Three-state boolean: true, false, or absent                                               |
+| `Codec.UUID_COERCED`    | `UUID`              | UUID as integer array, falling back to string                                             |
+| `Codec.COMPONENT_STYLE` | `Style`             | Adventure text style                                                                      |
+| `Codec.RAW_VALUE`       | `RawValue`          | Format-agnostic raw value (see [Converting Between Formats](#converting-between-formats)) |
 
-[ TODO: Item stack and other common codecs ]
+> [!NOTE]
+> Codecs for game types are often defined on their respective classes rather than on `Codec` directly, such as `ItemStack.CODEC`.
 
 ## Transforming Types
 The `.transform()` method converts between types during encoding and decoding. This is useful for custom types that can be represented as a simpler type.
@@ -191,7 +197,8 @@ BinaryTag nbt = PlayerData.CODEC.encode(Transcoder.NBT, playerData).orElseThrow(
 ```
 
 You can create your own transcoder, for example, one for reading YAML config files.
-[ TODO: SnakeYAML example, probably link to a Gist ]
+
+<!-- [ TODO: SnakeYAML example, probably link to a Gist ] -->
 
 ## Saving to Files
 ### JSON

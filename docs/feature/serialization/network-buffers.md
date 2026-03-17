@@ -33,39 +33,50 @@ NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
 
 ## Built-in Types
 ### Primitives
-| Type             | Java Type | Size       | Description                       |
-| ---------------- | --------- | ---------- | --------------------------------- |
-| `BOOLEAN`        | `Boolean` | 1 byte     | Boolean value                     |
-| `BYTE`           | `Byte`    | 1 byte     | Signed 8-bit integer              |
-| `UNSIGNED_BYTE`  | `Short`   | 1 byte     | Unsigned 8-bit integer (0-255)    |
-| `SHORT`          | `Short`   | 2 bytes    | Signed 16-bit integer             |
-| `UNSIGNED_SHORT` | `Integer` | 2 bytes    | Unsigned 16-bit integer (0-65535) |
-| `INT`            | `Integer` | 4 bytes    | Signed 32-bit integer             |
-| `UNSIGNED_INT`   | `Long`    | 4 bytes    | Unsigned 32-bit integer           |
-| `LONG`           | `Long`    | 8 bytes    | Signed 64-bit integer             |
-| `FLOAT`          | `Float`   | 4 bytes    | 32-bit floating point             |
-| `DOUBLE`         | `Double`  | 8 bytes    | 64-bit floating point             |
-| `VAR_INT`        | `Integer` | 1-5 bytes  | Variable-length integer           |
-| `VAR_LONG`       | `Long`    | 1-10 bytes | Variable-length long              |
+| Type               | Java Type           | Size       | Description                                       |
+| ------------------ | ------------------- | ---------- | ------------------------------------------------- |
+| `BOOLEAN`          | `Boolean`           | 1 byte     | Boolean value                                     |
+| `BYTE`             | `Byte`              | 1 byte     | Signed 8-bit integer                              |
+| `UNSIGNED_BYTE`    | `Short`             | 1 byte     | Unsigned 8-bit integer (0-255)                    |
+| `SHORT`            | `Short`             | 2 bytes    | Signed 16-bit integer                             |
+| `UNSIGNED_SHORT`   | `Integer`           | 2 bytes    | Unsigned 16-bit integer (0-65535)                 |
+| `INT`              | `Integer`           | 4 bytes    | Signed 32-bit integer                             |
+| `UNSIGNED_INT`     | `Long`              | 4 bytes    | Unsigned 32-bit integer                           |
+| `LONG`             | `Long`              | 8 bytes    | Signed 64-bit integer                             |
+| `FLOAT`            | `Float`             | 4 bytes    | 32-bit floating point                             |
+| `DOUBLE`           | `Double`            | 8 bytes    | 64-bit floating point                             |
+| `VAR_INT`          | `Integer`           | 1-5 bytes  | Variable-length integer                           |
+| `VAR_LONG`         | `Long`              | 1-10 bytes | Variable-length long                              |
+| `OPTIONAL_VAR_INT` | `@Nullable Integer` | 1-5 bytes  | Nullable VAR_INT; encodes 0 for absent, n+1 for n |
+| `VAR_INT_3`        | `Integer`           | 3 bytes    | Fixed 3-byte VarInt, range 0–2²¹                  |
+| `UNIT`             | `Unit`              | 0 bytes    | Represents the absence of a value                 |
 
 VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte, larger values use up to 5 bytes (VAR_INT) or 10 bytes (VAR_LONG).
 
 ### Strings and Text
-| Type           | Java Type           | Description                              |
-| -------------- | ------------------- | ---------------------------------------- |
-| `STRING`       | `String`            | UTF-8 string with VAR_INT length prefix  |
-| `KEY`          | `Key`               | Namespaced key (e.g., `minecraft:stone`) |
-| `COMPONENT`    | `Component`         | Adventure text component                 |
-| `NBT`          | `BinaryTag`         | NBT tag                                  |
-| `NBT_COMPOUND` | `CompoundBinaryTag` | NBT compound tag                         |
+| Type                | Java Type           | Description                                    |
+| ------------------- | ------------------- | ---------------------------------------------- |
+| `STRING`            | `String`            | UTF-8 string with VAR_INT length prefix        |
+| `KEY`               | `Key`               | Namespaced key (e.g., `minecraft:stone`)       |
+| `COMPONENT`         | `Component`         | Adventure text component                       |
+| `NBT`               | `BinaryTag`         | NBT tag                                        |
+| `NBT_COMPOUND`      | `CompoundBinaryTag` | NBT compound tag                               |
+| `JSON_COMPONENT`    | `Component`         | Adventure text component as JSON string        |
+| `STRING_TERMINATED` | `String`            | Null-terminated string                         |
+| `STRING_IO_UTF8`    | `String`            | UTF-8 string for stream I/O (no length prefix) |
 
 ### Positions and Vectors
-| Type             | Java Type | Description                                                |
-| ---------------- | --------- | ---------------------------------------------------------- |
-| `BLOCK_POSITION` | `Point`   | Block coordinates packed into a long                       |
-| `POS`            | `Pos`     | Position (double x, y, z) with rotation (float yaw, pitch) |
-| `VECTOR3`        | `Point`   | Three floats (x, y, z)                                     |
-| `VECTOR3D`       | `Point`   | Three doubles (x, y, z)                                    |
+| Type                 | Java Type         | Description                                                |
+| -------------------- | ----------------- | ---------------------------------------------------------- |
+| `BLOCK_POSITION`     | `Point`           | Block coordinates packed into a long                       |
+| `OPT_BLOCK_POSITION` | `@Nullable Point` | Optional block coordinates                                 |
+| `POS`                | `Pos`             | Position (double x, y, z) with rotation (float yaw, pitch) |
+| `VECTOR3`            | `Point`           | Three floats (x, y, z)                                     |
+| `VECTOR3D`           | `Point`           | Three doubles (x, y, z)                                    |
+| `VECTOR3I`           | `Point`           | Three VAR_INTs (x, y, z)                                   |
+| `VECTOR3B`           | `Point`           | Three signed bytes (x, y, z)                               |
+| `LP_VECTOR3`         | `Vec`             | Lossy-precision quantized vector                           |
+| `QUATERNION`         | `float[]`         | Rotation as four floats (x, y, z, w)                       |
 
 ### Arrays and Collections
 | Type             | Java Type | Description                            |
@@ -77,11 +88,15 @@ VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte
 | `RAW_BYTES`      | `byte[]`  | All remaining readable bytes           |
 
 ### Other Types
-| Type         | Java Type | Description                         |
-| ------------ | --------- | ----------------------------------- |
-| `UUID`       | `UUID`    | UUID stored as two longs            |
-| `BITSET`     | `BitSet`  | Java BitSet                         |
-| `INSTANT_MS` | `Instant` | Instant as milliseconds since epoch |
+| Type         | Java Type             | Description                         |
+| ------------ | --------------------- | ----------------------------------- |
+| `UUID`       | `UUID`                | UUID stored as two longs            |
+| `BITSET`     | `BitSet`              | Java BitSet                         |
+| `INSTANT_MS` | `Instant`             | Instant as milliseconds since epoch |
+| `OPT_CHAT`   | `@Nullable Component` | Optional Adventure text component   |
+| `DIRECTION`  | `Direction`           | Cardinal direction (by ordinal)     |
+| `POSE`       | `EntityPose`          | Entity pose (by ordinal)            |
+| `PUBLIC_KEY` | `PublicKey`           | RSA public key as byte array        |
 
 ## Transforming Types
 `.transform()` converts between a network type and your custom type.
@@ -227,7 +242,7 @@ NetworkBuffer.Type<BitSet> BITSET_64 = NetworkBuffer.FixedBitSet(64);
 ```
 
 ## Either Types
-Serialize one of two types. Uses a boolean tag to indicate which variant.
+Serialize one of two types. Prefixed by a boolean/byte to indicate which variant.
 
 ```java
 NetworkBuffer.Type<Either<String, Integer>> STRING_OR_INT = NetworkBuffer.Either(NetworkBuffer.STRING, NetworkBuffer.INT);
