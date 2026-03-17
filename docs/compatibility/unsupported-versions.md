@@ -4,24 +4,20 @@ description: Allowing clients using unsupported versions to join a Minestom serv
 
 # Unsupported Versions
 
-:::alert important
-Using unsupported Minecraft versions is, well, unsupported. You are unlikely to receive help when using these versions.
-:::
-
-Minestom aims to keep up-to-date with the latest version of Minecraft. However, this may not be beneficial for all servers. Sometimes there may be the case where:
-- Minestom is behind the latest version of Minecraft.
-- The server wants to support older clients.
+Minestom only aims to keep up-to-date with the latest version of Minecraft. If your server needs to support players on an older or snapshot version, consider using these below methods.
 
 ## ViaVersion
 
-To support a multiple versions on your server, you can use [ViaVersion](https://github.com/ViaVersion). If you have an existing [proxy](/docs/compatibility/proxies), you can install their [plugin](https://github.com/ViaVersion/ViaVersion). If you do not have one, you'll need to use [ViaProxy](https://github.com/ViaVersion/ViaProxy).
+If you are using a [proxy](/docs/compatibility/proxies.md) such as Velocity or BungeeCord, you can use the [plugin](https://github.com/ViaVersion/ViaVersion) developed by the [ViaVersion](https://github.com/ViaVersion) project. If you don't already have one, you'll need to use [ViaProxy](https://github.com/ViaVersion/ViaProxy), which is a standalone proxy that acts as a protocol translator.
+
+Please do not seek support if you are experiencing unintended behavior or crashes related to ViaVersion.
 
 ## Commit History
 
-:::alert important
+::: danger
 You **will not** receive support when using this method.
 :::
 
-In the case where you either decide that protocol translation is too jank or you only need a specific version for your server, using an older commit hash is an option. Going back in the Minestom commit history will allow you to find commits where the latest version was the one you need.
+If you decide that protocol translation is too jank or you only need a single version for your server, using an older commit is an option. Going back in the Minestom commit history will allow you to find the last commit that supported the version you need.
 
-Doing this will mean you miss out on new features, bug fixes and community support.
+Doing so will mean missing out on improved APIs, bug fixes, and community support.

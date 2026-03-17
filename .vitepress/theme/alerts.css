@@ -4,33 +4,45 @@
   --alert-text-color: inherit;
   --alert-header-bg: transparent;
 
-  --alert-note-color: rgb(86, 168, 255);
+  --alert-note-color: rgb(140, 140, 140);
   --alert-info-color: rgb(86, 168, 255);
   --alert-warning-color: rgb(250, 204, 21);
   --alert-danger-color: rgb(255, 88, 88);
   --alert-success-color: rgb(94, 199, 95);
   --alert-important-color: rgb(212, 153, 247);
 
-  --alert-note-bg: rgba(86, 168, 255, 0.2);
+  --alert-note-bg: rgba(110, 110, 110, 0.2);
   --alert-info-bg: rgba(86, 168, 255, 0.2);
   --alert-warning-bg: rgba(250, 204, 21, 0.2);
   --alert-danger-bg: rgba(255, 88, 88, 0.2);
   --alert-success-bg: rgba(94, 199, 95, 0.2);
   --alert-important-bg: rgba(212, 153, 247, 0.2);
+
+  --alert-note-code-bg: rgba(110, 110, 110, 0.22);
+  --alert-info-code-bg: rgba(86, 168, 255, 0.22);
+  --alert-warning-code-bg: rgba(250, 204, 21, 0.22);
+  --alert-danger-code-bg: rgba(255, 88, 88, 0.22);
+  --alert-success-code-bg: rgba(94, 199, 95, 0.22);
+  --alert-important-code-bg: rgba(212, 153, 247, 0.22);
+
+  --alert-note-code-color: rgb(190, 190, 190);
+  --alert-info-code-color: rgb(100, 185, 255);
+  --alert-warning-code-color: rgb(225, 190, 40);
+  --alert-danger-code-color: rgb(255, 160, 160);
+  --alert-success-code-color: rgb(80, 210, 80);
+  --alert-important-code-color: rgb(205, 155, 250);
 }
 
 /* General Alert styling */
 .alert {
-  padding: 14px 18px;
-  margin: 8px 0;
+  padding: 16px;
+  margin: 20px 0;
   background-color: transparent;
   display: flex;
   flex-direction: column;
   font-size: 14px;
-  border-radius: 4px;
+  border-radius: 8px;
   transition: all 0.1s ease;
-  border-left: 4px solid var(--alert-border-color);
-  overflow: hidden;
 }
 
 /* Remove extra spacing inside alerts */
@@ -64,37 +76,68 @@
 
 /* Alert Types */
 .alert-note {
-  border-left-color: var(--alert-note-color);
+  border: 1px solid var(--alert-note-color);
   background: var(--alert-note-bg);
 }
 .alert-note .alert-header { color: var(--alert-note-color); }
 
 .alert-info {
-  border-left-color: var(--alert-info-color);
+  border: 1px solid var(--alert-info-color);
   background: var(--alert-info-bg);
 }
 .alert-info .alert-header { color: var(--alert-info-color); }
 
 .alert-warning {
-  border-left-color: var(--alert-warning-color);
+  border: 1px solid var(--alert-warning-color);
   background: var(--alert-warning-bg);
 }
 .alert-warning .alert-header { color: var(--alert-warning-color); }
 
 .alert-danger {
-  border-left-color: var(--alert-danger-color);
+  border: 1px solid var(--alert-danger-color);
   background: var(--alert-danger-bg);
 }
 .alert-danger .alert-header { color: var(--alert-danger-color); }
 
 .alert-success {
-  border-left-color: var(--alert-success-color);
+  border: 1px solid var(--alert-success-color);
   background: var(--alert-success-bg);
 }
 .alert-success .alert-header { color: var(--alert-success-color); }
 
-.alert-important {
-  border-left-color: var(--alert-important-color);
+.alert-important, .alert-tip {
+  border: 1px solid var(--alert-important-color);
   background: var(--alert-important-bg);
 }
 .alert-important .alert-header { color: var(--alert-important-color); }
+.alert-tip .alert-header { color: var(--alert-important-color); }
+
+/* Inline code inside alerts */
+.vp-doc .alert :not(pre) > code {
+  padding: 1px 4px;
+}
+.vp-doc .alert-note :not(pre) > code {
+  background-color: var(--alert-note-code-bg);
+  color: var(--alert-note-code-color);
+}
+.vp-doc .alert-info :not(pre) > code {
+  background-color: var(--alert-info-code-bg);
+  color: var(--alert-info-code-color);
+}
+.vp-doc .alert-warning :not(pre) > code {
+  background-color: var(--alert-warning-code-bg);
+  color: var(--alert-warning-code-color);
+}
+.vp-doc .alert-danger :not(pre) > code {
+  background-color: var(--alert-danger-code-bg);
+  color: var(--alert-danger-code-color);
+}
+.vp-doc .alert-success :not(pre) > code {
+  background-color: var(--alert-success-code-bg);
+  color: var(--alert-success-code-color);
+}
+.vp-doc .alert-important :not(pre) > code,
+.vp-doc .alert-tip :not(pre) > code {
+  background-color: var(--alert-important-code-bg);
+  color: var(--alert-important-code-color);
+}

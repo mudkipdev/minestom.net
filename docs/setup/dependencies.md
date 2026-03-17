@@ -27,7 +27,7 @@ onMounted(() => {
 
 # Dependencies
 
-:::alert info
+::: note
 Minestom needs Java 25 or newer in order to run. If you are using Gradle, you must use version 9.1 or higher. If you are using IntelliJ IDEA, you must use 2025.2 or higher.
 :::
 

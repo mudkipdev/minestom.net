@@ -132,7 +132,7 @@ AcquirableCollection<Player> acquirablePlayers = getOnlinePlayers();
 Stream<Player> players = acquirablePlayers.unwrap();
 ```
 
-:::alert warning
+::: warning
 Those are not safe operations, be sure to read the [Thread safety](thread-safety) page to understand the implications.
 :::
 
