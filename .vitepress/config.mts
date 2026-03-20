@@ -97,20 +97,7 @@ export default defineConfig({
           items: [
             { text: "Adventure", link: "/docs/feature/adventure" },
             { text: "Items", link: "/docs/feature/items" },
-            {
-              text: "Events",
-              link: "/docs/feature/events",
-              items: [
-                {
-                  text: "Implementation",
-                  link: "/docs/feature/events/implementation",
-                },
-                {
-                  text: "Server List Ping",
-                  link: "/docs/feature/events/server-list-ping",
-                },
-              ],
-            },
+            { text: "Events", link: "/docs/feature/events" },
             {
               text: "Player Capabilities",
               link: "/docs/feature/player-capabilities",
@@ -139,6 +126,7 @@ export default defineConfig({
             },
             { text: "Locator Bar", link: "/docs/feature/locator-bar" },
             { text: "Query System", link: "/docs/feature/query" },
+            { text: "Changing the MOTD", link: "/docs/feature/motd" },
             { text: "Open to LAN", link: "/docs/feature/open-to-lan" },
           ],
         },

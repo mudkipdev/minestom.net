@@ -2,7 +2,7 @@
 description: Responding to all types of server list ping in one place.
 ---
 
-# Server list ping
+# Changing the MOTD
 
 Minestom provides the ability to customise responses to five different server list ping types all in one place. Put simply, to listen to every type of server list ping event you just need to listen to the `ServerListPingEvent` and modify the `Status` in the event. Regardless of the source of the ping, the response data will be formatted in the correct way for the corresponding source.
 
@@ -53,7 +53,7 @@ The description is formatted using legacy section sign color coding and is autom
 
 Covered by the `OPEN_TO_LAN` constant, this category represents server list pings that are sent _from_ the server when it is mimicking being a single player world that is opened to LAN. This type only supports the description. As with the legacy type, the description is formatted using legacy section sign color coding and is automatically converted to this format.
 
-For more information on opening a server to LAN, see the [Open to LAN](../open-to-lan) page.
+For more information on opening a server to LAN, see the [Open to LAN](./open-to-lan) page.
 
 ## Ping
 
