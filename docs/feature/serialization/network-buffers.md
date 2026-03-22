@@ -63,7 +63,7 @@ VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte
 | `NBT_COMPOUND`      | `CompoundBinaryTag` | NBT compound tag                               |
 | `JSON_COMPONENT`    | `Component`         | Adventure text component as JSON string        |
 | `STRING_TERMINATED` | `String`            | Null-terminated string                         |
-| `STRING_IO_UTF8`    | `String`            | UTF-8 string for stream I/O (no length prefix) |
+| `STRING_IO_UTF8`    | `String`            | Modified UTF-8 string for stream I/O with a 2-byte `SHORT` length prefix |
 
 ### Positions and Vectors
 | Type                 | Java Type         | Description                                                |
@@ -224,10 +224,19 @@ int value = buffer.readAt(100, NetworkBuffer.INT);
 ```
 
 ## Extract Bytes
-Serialize writes from a callback into a byte array:
+Extract the bytes consumed while a callback advances the read index:
 
 ```java
 byte[] bytes = buffer.extractBytes(buf -> {
+    buf.read(NetworkBuffer.VAR_INT);
+    buf.read(NetworkBuffer.STRING);
+});
+```
+
+To serialize writes into a new byte array, use `NetworkBuffer.makeArray(...)` instead:
+
+```java
+byte[] bytes = NetworkBuffer.makeArray(buf -> {
     buf.write(NetworkBuffer.VAR_INT, 42);
     buf.write(NetworkBuffer.STRING, "test");
 });
