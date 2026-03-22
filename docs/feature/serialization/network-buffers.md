@@ -56,15 +56,15 @@ NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
 VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte, larger values use up to 5 bytes (VAR_INT) or 10 bytes (VAR_LONG).
 
 ### Strings and Text
-| Type                | Java Type           | Description                                    |
-| ------------------- | ------------------- | ---------------------------------------------- |
-| `STRING`            | `String`            | UTF-8 string with VAR_INT length prefix        |
-| `KEY`               | `Key`               | Namespaced key (e.g., `minecraft:stone`)       |
-| `COMPONENT`         | `Component`         | Adventure text component in the standard network format |
-| `NBT`               | `BinaryTag`         | NBT tag                                        |
-| `NBT_COMPOUND`      | `CompoundBinaryTag` | NBT compound tag                               |
-| `JSON_COMPONENT`    | `Component`         | Adventure text component as JSON string        |
-| `STRING_TERMINATED` | `String`            | Null-terminated UTF-8 string                   |
+| Type                | Java Type           | Description                                                                                               |
+| ------------------- | ------------------- | --------------------------------------------------------------------------------------------------------- |
+| `STRING`            | `String`            | UTF-8 string with VAR_INT length prefix                                                                   |
+| `KEY`               | `Key`               | Namespaced key (e.g., `minecraft:stone`)                                                                  |
+| `COMPONENT`         | `Component`         | Adventure text component in the standard network format                                                   |
+| `NBT`               | `BinaryTag`         | NBT tag                                                                                                   |
+| `NBT_COMPOUND`      | `CompoundBinaryTag` | NBT compound tag                                                                                          |
+| `JSON_COMPONENT`    | `Component`         | Adventure text component as JSON string                                                                   |
+| `STRING_TERMINATED` | `String`            | Null-terminated UTF-8 string                                                                              |
 | `STRING_IO_UTF8`    | `String`            | Modified UTF-8 string for stream I/O with a 2-byte length prefix (`DataOutputStream.writeUTF` compatible) |
 
 ### Positions and Vectors
@@ -90,15 +90,15 @@ VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte
 | `RAW_BYTES`      | `byte[]`  | All remaining readable bytes           |
 
 ### Other Types
-| Type         | Java Type             | Description                         |
-| ------------ | --------------------- | ----------------------------------- |
-| `UUID`       | `UUID`                | UUID stored as two longs            |
-| `BITSET`     | `BitSet`              | Java BitSet                         |
-| `INSTANT_MS` | `Instant`             | Instant as milliseconds since epoch |
-| `OPT_CHAT`   | `@Nullable Component` | Optional Adventure text component   |
+| Type         | Java Type             | Description                                    |
+| ------------ | --------------------- | ---------------------------------------------- |
+| `UUID`       | `UUID`                | UUID stored as two longs                       |
+| `BITSET`     | `BitSet`              | Java BitSet                                    |
+| `INSTANT_MS` | `Instant`             | Instant as milliseconds since epoch            |
+| `OPT_CHAT`   | `@Nullable Component` | Optional Adventure text component              |
 | `DIRECTION`  | `Direction`           | Direction enum (including up/down, by ordinal) |
-| `POSE`       | `EntityPose`          | Entity pose (by ordinal)            |
-| `PUBLIC_KEY` | `PublicKey`           | RSA public key as byte array        |
+| `POSE`       | `EntityPose`          | Entity pose (by ordinal)                       |
+| `PUBLIC_KEY` | `PublicKey`           | RSA public key as byte array                   |
 
 ## Transforming Types
 `.transform()` converts between a network type and your custom type.
