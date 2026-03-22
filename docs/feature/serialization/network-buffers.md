@@ -26,10 +26,12 @@ NetworkBuffer buffer = NetworkBuffer.resizableBuffer(1024);
 // Fixed-size buffer
 NetworkBuffer buffer = NetworkBuffer.staticBuffer(512);
 
-// Wrap an existing byte array
+// Create a fixed-size buffer initialized from a byte array
 byte[] data = new byte[]{1, 2, 3, 4};
 NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
 ```
+
+`NetworkBuffer.wrap(...)` copies the provided bytes into the buffer; it does not share the original `byte[]`.
 
 ## Built-in Types
 ### Primitives
@@ -48,7 +50,7 @@ NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
 | `VAR_INT`          | `Integer`           | 1-5 bytes  | Variable-length integer                           |
 | `VAR_LONG`         | `Long`              | 1-10 bytes | Variable-length long                              |
 | `OPTIONAL_VAR_INT` | `@Nullable Integer` | 1-5 bytes  | Nullable VAR_INT; encodes 0 for absent, n+1 for n |
-| `VAR_INT_3`        | `Integer`           | 3 bytes    | Fixed 3-byte VarInt, range 0–2²¹                  |
+| `VAR_INT_3`        | `Integer`           | 3 bytes    | Fixed 3-byte VarInt, range 0–2²¹-1                |
 | `UNIT`             | `Unit`              | 0 bytes    | Represents the absence of a value                 |
 
 VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte, larger values use up to 5 bytes (VAR_INT) or 10 bytes (VAR_LONG).
@@ -58,12 +60,12 @@ VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte
 | ------------------- | ------------------- | ---------------------------------------------- |
 | `STRING`            | `String`            | UTF-8 string with VAR_INT length prefix        |
 | `KEY`               | `Key`               | Namespaced key (e.g., `minecraft:stone`)       |
-| `COMPONENT`         | `Component`         | Adventure text component                       |
+| `COMPONENT`         | `Component`         | Adventure text component in the standard network format |
 | `NBT`               | `BinaryTag`         | NBT tag                                        |
 | `NBT_COMPOUND`      | `CompoundBinaryTag` | NBT compound tag                               |
 | `JSON_COMPONENT`    | `Component`         | Adventure text component as JSON string        |
-| `STRING_TERMINATED` | `String`            | Null-terminated string                         |
-| `STRING_IO_UTF8`    | `String`            | Modified UTF-8 string for stream I/O with a 2-byte `SHORT` length prefix |
+| `STRING_TERMINATED` | `String`            | Null-terminated UTF-8 string                   |
+| `STRING_IO_UTF8`    | `String`            | Modified UTF-8 string for stream I/O with a 2-byte length prefix (`DataOutputStream.writeUTF` compatible) |
 
 ### Positions and Vectors
 | Type                 | Java Type         | Description                                                |
@@ -94,7 +96,7 @@ VAR_INT and VAR_LONG encode small values in fewer bytes. Values 0-127 use 1 byte
 | `BITSET`     | `BitSet`              | Java BitSet                         |
 | `INSTANT_MS` | `Instant`             | Instant as milliseconds since epoch |
 | `OPT_CHAT`   | `@Nullable Component` | Optional Adventure text component   |
-| `DIRECTION`  | `Direction`           | Cardinal direction (by ordinal)     |
+| `DIRECTION`  | `Direction`           | Direction enum (including up/down, by ordinal) |
 | `POSE`       | `EntityPose`          | Entity pose (by ordinal)            |
 | `PUBLIC_KEY` | `PublicKey`           | RSA public key as byte array        |
 
@@ -113,7 +115,7 @@ PotionType type = buffer.read(POTION_TYPE);
 ```
 
 ## Enums
-Enums can be serialized by ordinal using `NetworkBuffer.Enum()`. Unlike `Codec.Enum()`, which encodes by name, this uses the enum's numeric ordinal.
+Enums can be serialized by ordinal using `NetworkBuffer.Enum()`. Unlike `Codec.Enum()`, which encodes by name, this uses the enum's numeric ordinal as a `VAR_INT`.
 
 ```java
 NetworkBuffer.Type<Direction> DIRECTION = NetworkBuffer.Enum(Direction.class);
@@ -138,11 +140,11 @@ NetworkBuffer.Type<@Nullable Component> OPT_COMPONENT =
 buffer.write(OPT_COMPONENT, null);
 buffer.write(OPT_COMPONENT, someComponent);
 
-Component component = buffer.read(OPT_COMPONENT);
+@Nullable Component component = buffer.read(OPT_COMPONENT);
 ```
 
 ## Collections
-`.list()` creates a list type. `.mapValue()` creates a map type with string keys. Both accept a maximum size to prevent malicious payloads.
+`.list()` creates a list type. `.mapValue()` creates a map type whose keys use the receiver type and whose values use the provided type. Both accept a maximum size used during reads to reject oversized payloads.
 
 ```java
 NetworkBuffer.Type<List<String>> STRING_LIST =
@@ -158,7 +160,7 @@ buffer.write(STRING_INT_MAP, Map.of("health", 20, "armor", 5));
 ```
 
 ## Templates
-Templates serialize records. Alternate between type and getter, ending with the constructor. Supports up to 20 fields.
+Templates serialize structured objects such as records. Alternate between type and getter pairs, ending with a constructor or factory function. Overloads are provided for up to 20 fields.
 
 ```java
 record Particle(Point position, int id, float scale) {
@@ -242,16 +244,18 @@ byte[] bytes = NetworkBuffer.makeArray(buf -> {
 });
 ```
 
-## Fixed-Size Types
-Create types for fixed-size byte arrays and bitsets:
+## Fixed-Length Bytes and Bounded BitSets
+Create fixed-length byte-array types and bitset types with a maximum logical size:
 
 ```java
 NetworkBuffer.Type<byte[]> BYTES_16 = NetworkBuffer.FixedRawBytes(16);
 NetworkBuffer.Type<BitSet> BITSET_64 = NetworkBuffer.FixedBitSet(64);
 ```
 
+`FixedBitSet(length)` limits the highest set bit and reads up to `(length + 7) / 8` bytes; it does not pad writes to a fixed-width byte array.
+
 ## Either Types
-Serialize one of two types. Prefixed by a boolean/byte to indicate which variant.
+Serialize one of two types. Prefixed by a boolean: `true` for the left variant, `false` for the right variant.
 
 ```java
 NetworkBuffer.Type<Either<String, Integer>> STRING_OR_INT = NetworkBuffer.Either(NetworkBuffer.STRING, NetworkBuffer.INT);
