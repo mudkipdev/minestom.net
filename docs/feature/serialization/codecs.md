@@ -188,9 +188,7 @@ A transcoder bridges a codec to a specific file format. The two built-in ones ar
 - `Transcoder.NBT`: Serializing to Minecraft NBT using the [Adventure](https://github.com/PaperMC/adventure) library
 - `Transcoder.JSON`: Serializing to JSON files using the [GSON](https://github.com/google/gson) library
 
-:::note
 Both of these libraries are built-in, so you don't have to worry about adding any dependencies to start using them.
-:::
 
 ```java
 PlayerData playerData = new PlayerData("Steve", 67, null);
@@ -199,7 +197,7 @@ BinaryTag nbt = PlayerData.CODEC.encode(Transcoder.NBT, playerData).orElseThrow(
 ```
 
 :::tip
-You can create your own transcoder, for example, one for reading YAML config files.
+You can create your own transcoder, for example, one for reading YAML configuration files.
 :::
 
 <!-- [ TODO: SnakeYAML example, probably link to a Gist ] -->
