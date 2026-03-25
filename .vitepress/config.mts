@@ -13,19 +13,19 @@ export default defineConfig({
     config(md) {
       md.use(tabsMarkdownPlugin);
       md.use(bracketed_spans_plugin)
-      md.use(container_plugin, 'alert', {
-        render(tokens, idx) {
-          const token = tokens[idx]
-          const type = token.info.trim().split(' ')[1] || 'info'
-          if (token.nesting === 1) {
-            return `<div class="alert alert-${type}">
-                      <div class="alert-header">${type.toUpperCase()}</div>
-                        <div class="alert-content">\n`
-          } else {
-            return `</div></div>\n`
+      for (const type of ['note', 'info', 'tip', 'warning', 'danger', 'success', 'important']) {
+        md.use(container_plugin, type, {
+          render(tokens, idx) {
+            if (tokens[idx].nesting === 1) {
+              return `<div class="alert alert-${type}">
+                <div class="alert-header">${type.toUpperCase()}</div>
+                  <div class="alert-content">\n`
+            } else {
+              return `</div></div>\n`
+            }
           }
-        }
-      })
+        })
+      }
     }
   },
   head: [
