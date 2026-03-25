@@ -31,7 +31,7 @@ public class CustomPlayer extends Player {
 MinecraftServer.getConnectionManager().setPlayerProvider(CustomPlayer::new);
 ```
 
-:::alert warning
+::: warning
 The UUID provider is unnecessary and will not work if you have IP forwarding enabled (Velocity/Bungee)
 :::
 

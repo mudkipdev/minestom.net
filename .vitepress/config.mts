@@ -13,19 +13,19 @@ export default defineConfig({
     config(md) {
       md.use(tabsMarkdownPlugin);
       md.use(bracketed_spans_plugin)
-      md.use(container_plugin, 'alert', {
-        render(tokens, idx) {
-          const token = tokens[idx]
-          const type = token.info.trim().split(' ')[1] || 'info'
-          if (token.nesting === 1) {
-            return `<div class="alert alert-${type}">
-                      <div class="alert-header">${type.toUpperCase()}</div>
-                        <div class="alert-content">\n`
-          } else {
-            return `</div></div>\n`
+      for (const type of ['note', 'info', 'tip', 'warning', 'danger', 'success', 'important']) {
+        md.use(container_plugin, type, {
+          render(tokens, idx) {
+            if (tokens[idx].nesting === 1) {
+              return `<div class="alert alert-${type}">
+                <div class="alert-header">${type.toUpperCase()}</div>
+                  <div class="alert-content">\n`
+            } else {
+              return `</div></div>\n`
+            }
           }
-        }
-      })
+        })
+      }
     }
   },
   head: [
@@ -105,20 +105,7 @@ export default defineConfig({
               ],
             },
             { text: "Items", link: "/docs/feature/items" },
-            {
-              text: "Events",
-              link: "/docs/feature/events",
-              items: [
-                {
-                  text: "Implementation",
-                  link: "/docs/feature/events/implementation",
-                },
-                {
-                  text: "Server List Ping",
-                  link: "/docs/feature/events/server-list-ping",
-                },
-              ],
-            },
+            { text: "Events", link: "/docs/feature/events" },
             {
               text: "Player Capabilities",
               link: "/docs/feature/player-capabilities",
@@ -147,6 +134,7 @@ export default defineConfig({
             },
             { text: "Locator Bar", link: "/docs/feature/locator-bar" },
             { text: "Query System", link: "/docs/feature/query" },
+            { text: "Changing the MOTD", link: "/docs/feature/motd" },
             { text: "Open to LAN", link: "/docs/feature/open-to-lan" },
           ],
         },
