@@ -45,8 +45,9 @@ PlayerData decodedData = PlayerData.CODEC.decode(Transcoder.JSON, json).orElseTh
 | `Codec.COMPONENT_STYLE` | `Style`             | Adventure text style                                                                      |
 | `Codec.RAW_VALUE`       | `RawValue`          | Format-agnostic raw value (see [Converting Between Formats](#converting-between-formats)) |
 
-> [!NOTE]
-> Codecs for game types are often defined on their respective classes rather than on `Codec` directly, such as `ItemStack.CODEC`.
+:::note
+Codecs for game types are often defined on their respective classes rather than on `Codec` directly, such as `ItemStack.CODEC`.
+:::
 
 ## Transforming Types
 The `.transform()` method converts between types during encoding and decoding. This is useful for custom types that can be represented as a simpler type.
@@ -187,8 +188,9 @@ A transcoder bridges a codec to a specific file format. The two built-in ones ar
 - `Transcoder.NBT`: Serializing to Minecraft NBT using the [Adventure](https://github.com/PaperMC/adventure) library
 - `Transcoder.JSON`: Serializing to JSON files using the [GSON](https://github.com/google/gson) library
 
-> [!NOTE]
-> Both of these libraries are built-in, so you don't have to worry about adding any dependencies to start using them.
+:::note
+Both of these libraries are built-in, so you don't have to worry about adding any dependencies to start using them.
+:::
 
 ```java
 PlayerData playerData = new PlayerData("Steve", 67, null);
@@ -196,7 +198,9 @@ JsonElement json = PlayerData.CODEC.encode(Transcoder.JSON, playerData).orElseTh
 BinaryTag nbt = PlayerData.CODEC.encode(Transcoder.NBT, playerData).orElseThrow();
 ```
 
+:::tip
 You can create your own transcoder, for example, one for reading YAML config files.
+:::
 
 <!-- [ TODO: SnakeYAML example, probably link to a Gist ] -->
 
