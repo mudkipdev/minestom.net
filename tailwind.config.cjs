@@ -54,6 +54,7 @@ module.exports = {
       },
       fontFamily: {
         base: ["var(--vp-font-family-base)"],
+        mono: ["var(--vp-font-family-mono)"],
       },
       boxShadow: {
         "vp-1": "var(--vp-shadow-1)",
