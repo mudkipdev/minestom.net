@@ -1,9 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
 
 :root {
   --vp-font-family-base: 'Inter', sans-serif;
-  --vp-font-family-mono: 'JetBrains Mono', monospace;
 }
 
 body {
@@ -17,7 +15,6 @@ h1, h2, h3, h4, h5, h6 {
 code, pre {
   padding: 2px 6px;
   border-radius: 4px;
-  font-weight: 700 !important;
 }
 
 @tailwind base;
