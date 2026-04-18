@@ -7,7 +7,6 @@ const redirects: Record<string, string> = {
   "/docs/feature/events/server-list-ping": "/docs/feature/motd",
 };
 
-// a
 function renderRedirect(newUrl: string): string {
   return `
     <!DOCTYPE html>
