@@ -32,14 +32,18 @@
   text-decoration: underline;
 }
 
+body {
+  padding-top: var(--banner-height);
+}
+
 .VPNav,
 .VPLocalNav,
 .VPSidebar {
   top: var(--banner-height) !important;
 }
 
-.VPContent.has-sidebar {
-  padding-top: var(--banner-height);
+.VPSidebar {
+  height: calc(100vh - var(--banner-height)) !important;
 }
 
 html {
