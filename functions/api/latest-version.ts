@@ -46,18 +46,24 @@ async function cacheVersion(
 
 export const onRequest: PagesFunction<Env> = async (context) => {
     try {
-        const cachedVersion = await getCachedVersion(context.env.KV_CACHE);
-        if (cachedVersion) {
-            console.info("Maven response was already cached.");
-            return new Response(JSON.stringify({ latestVersion: cachedVersion }), {
-                headers: { "Content-Type": "application/json" },
-            });
+        const cache = context.env.KV_CACHE;
+
+        if (cache) {
+            const cachedVersion = await getCachedVersion(cache);
+            if (cachedVersion) {
+                console.info("Maven response was already cached.");
+                return new Response(JSON.stringify({ latestVersion: cachedVersion }), {
+                    headers: { "Content-Type": "application/json" },
+                });
+            }
         }
 
         const latestVersion = await fetchLatestVersion();
 
-        await cacheVersion(context.env.KV_CACHE, latestVersion);
-        console.info("Successfully cached API response.");
+        if (cache) {
+            await cacheVersion(cache, latestVersion);
+            console.info("Successfully cached API response.");
+        }
 
         return new Response(JSON.stringify({ latestVersion }), {
             headers: {
