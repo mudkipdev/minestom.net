@@ -31,7 +31,7 @@ EventNode.type("click", EventFilter.INVENTORY, (event, inv) -> inventory == inv)
 
 - Inventory classes have been renamed. `AbstractInventory` is now `Inventory`, and what was `Inventory` is now `ContainerInventory`. This makes the hierarchy a bit clearer. To be clear, `ContainerInventory` represents all named inventories (e.g. chest inventories, anvil inventories, crafting inventories).
 
-- Click events with `#getClickedItem()`, `#getClickType()`, `#getSlot()`, etc. have been replaced with the `Click.Info` type. This is an interface permitting a bunch of subclasses, including `Left`, `Right`, `RightShift`, etc., each storing the relevant slots. When listening to an event, you can simply check the click type:
+- Click events with `#getClickedItem()`, `#getClickType()`, `#getSlot()`, etc. have been replaced with the `Click.Info` type. This is an interface permitting a bunch of subclasses, including `Left`, `Right`, `RightShift`, etc., each storing the relevant slots. When listening to an event, you can simply check the click type:\
   `if (event.getClickInfo() instanceof Click.Info.Left left) { /* logic */ }`
 
 - Inventory click events have been refactored to the following structure:

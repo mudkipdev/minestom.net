@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import type { Plugin } from "vite";
 
 const redirects: Record<string, string> = {
   // https://github.com/Minestom/minestom.net/pull/45
@@ -7,6 +8,13 @@ const redirects: Record<string, string> = {
   "/docs/feature/events/server-list-ping": "/docs/feature/motd",
   // GLFW map rendering was removed from Minestom
   "/docs/feature/map-rendering/glfwmaprendering": "/docs/feature/map-rendering",
+  "/docs/world/anvilloader": "/docs/world/chunk-management/anvilloader",
+  "/docs/world/lightloader": "/docs/world/chunk-management/lighting",
+  "/docs/introduction": "/docs/getting-started/introduction",
+  "/docs/faq/what-is-minestom": "/docs/getting-started/what-is-minestom",
+  "/docs/faq/when-to-use": "/docs/getting-started/when-to-use",
+  "/docs/setup/dependencies": "/docs/getting-started/dependencies",
+  "/docs/setup/your-first-server": "/docs/getting-started/your-first-server",
 };
 
 function renderRedirect(newUrl: string): string {
@@ -36,4 +44,28 @@ export function writeRedirects(outputDirectory: string): void {
 
   // send real 301 response (only on Cloudflare Pages)
   fs.writeFileSync(path.join(outputDirectory, "_redirects"), lines.join("\n") + "\n");
+}
+
+export function redirectsPlugin(): Plugin {
+  return {
+    name: "minestom-redirects",
+    apply: "serve",
+
+    configureServer(server) {
+      server.middlewares.use((request, response, next) => {
+        const [requestPath, query] = (request.url ?? "").split("?");
+        const url = requestPath.length > 1 ? requestPath.replace(/\/+$/, "") : requestPath;
+        const target = redirects[url];
+
+        if (target === undefined) {
+          next();
+          return;
+        }
+
+        response.statusCode = 302;
+        response.setHeader("Location", query ? `${target}?${query}` : target);
+        response.end();
+      });
+    },
+  };
 }

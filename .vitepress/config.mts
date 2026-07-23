@@ -1,176 +1,151 @@
 import { defineConfig } from "vitepress";
-import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
-import bracketed_spans_plugin from "markdown-it-bracketed-spans"
-import container_plugin from "markdown-it-container"
-import { writeRedirects } from "./redirects";
+import { withSidebar } from "vitepress-sidebar";
+import { redirectsPlugin, writeRedirects } from "./redirects";
 
-// https://vitepress.dev/reference/site-config
-export default defineConfig({
-  title: "Minestom",
-  description:
-    "A multithreaded, open-source library for developing high-performance Minecraft servers.",
-  markdown: {
-    breaks: true,
-    config(md) {
-      md.use(tabsMarkdownPlugin);
-      md.use(bracketed_spans_plugin)
-      for (const type of ['note', 'info', 'tip', 'warning', 'danger', 'success', 'important']) {
-        md.use(container_plugin, type, {
-          render(tokens, idx) {
-            if (tokens[idx].nesting === 1) {
-              return `<div class="alert alert-${type}">
-                <div class="alert-header">${type.toUpperCase()}</div>
-                  <div class="alert-content">\n`
-            } else {
-              return `</div></div>\n`
-            }
-          }
-        })
-      }
+const CATEGORY_TITLES: Record<string, string> = {
+    "Getting started": "Getting Started",
+    "Thread architecture": "Thread Architecture",
+};
+
+function normalizeSidebar(items: any[], isCategory = true): void {
+    for (const item of items) {
+        if (isCategory && item.items) {
+            delete item.link;
+            item.text = CATEGORY_TITLES[item.text] ?? item.text;
+        } else if (typeof item.link === "string") {
+            item.link = item.link.replace(/(?:^|\/)index\.md$/, "/");
+        }
+        if (item.items) normalizeSidebar(item.items, false);
     }
-  },
-  head: [
-    ["link", { rel: "icon", href: "/favicon.ico" }],
-    ["meta", { name: "theme-color", content: "#ff6c32" }],
-  ],
-  cleanUrls: true,
+}
 
-  buildEnd(siteConfig) {
-    writeRedirects(siteConfig.outDir);
-  },
+const config = withSidebar({
+    title: "Minestom",
+    description: "The open-source, lightweight Minecraft server built from the ground up..",
+    cleanUrls: true,
 
-  themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
-    search: {
-      provider: "local"
-    },
-    logo: "/minestom-logo.png",
-    nav: [
-      { text: "Libraries", link: "/libraries" },
-      // { text: "Showcase", link: "/showcase/introduction" },
-      { text: "Wiki", link: "/docs/introduction" },
-      { text: "Javadoc", link: "https://javadoc.minestom.net" },
+    head: [
+        ["link", { rel: "icon", href: "/favicon.ico" }],
+        ["meta", { name: "theme-color", content: "#ff6c32" }],
+        ["link", { rel: "preconnect", href: "https://fonts.googleapis.com" }],
+        ["link", { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "" }],
+        ["link", {
+            rel: "stylesheet",
+            href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:wght@400;700&display=swap",
+        }],
     ],
 
-    sidebar: {
-      // "/showcase": [
-      //   {
-      //     text: "Introduction",
-      //     link: "/showcase/introduction",
-      //   },
-      //
-      //   // Showcase example
-      //   {
-      //     text: "Showcase",
-      //     items: [{ text: "Example Server", link: "/showcase/example" }],
-      //   },
-      // ],
-      "/docs/": [
-        {
-          text: "Introduction",
-          link: "/docs/introduction",
+    themeConfig: {
+        lang: "en",
+        logo: "/minestom-logo.png",
+
+        docFooter: {
+            prev: false,
+            next: false
         },
-        {
-          text: "Setup",
-          items: [
-            { text: "Dependencies", link: "/docs/setup/dependencies" },
-            {
-              text: "Your First Server",
-              link: "/docs/setup/your-first-server",
-            },
-          ],
+
+        search: {
+            provider: "local"
         },
-        {
-          text: "World",
-          items: [
-            { text: "Instances", link: "/docs/world/instances" },
+
+        nav: [
             {
-              text: "Chunk Management",
-              link: "/docs/world/chunk-management",
-              items: [
-                { text: "Anvil Loader", link: "/docs/world/anvilloader" },
-                { text: "Lighting", link: "/docs/world/lightloader" },
-              ],
-            },
-            { text: "Blocks", link: "/docs/world/blocks" },
-            { text: "Coordinates", link: "/docs/world/coordinates" },
-            { text: "Generation", link: "/docs/world/generation" },
-            { text: "Batch", link: "/docs/world/batch" },
-          ],
-        },
-        {
-          text: "Feature",
-          items: [
-            { text: "Adventure", link: "/docs/feature/adventure" },
-            {
-              text: "Serialization",
-              link: "/docs/feature/serialization",
-              items: [
-                { text: "Codecs", link: "/docs/feature/serialization/codecs" },
-                { text: "Network Buffers", link: "/docs/feature/serialization/network-buffers" },
-              ],
-            },
-            { text: "Items", link: "/docs/feature/items" },
-            { text: "Events", link: "/docs/feature/events" },
-            {
-              text: "Player Capabilities",
-              link: "/docs/feature/player-capabilities",
+                text: "Libraries",
+                link: "/libraries"
             },
             {
-              text: "Entities",
-              link: "/docs/feature/entities",
-              items: [{ text: "AI", link: "/docs/feature/entities/ai" }],
-            },
-            { text: "Tags", link: "/docs/feature/tags" },
-            { text: "Schedulers", link: "/docs/feature/schedulers" },
-            { text: "Commands", link: "/docs/feature/commands" },
-            { text: "Inventories", link: "/docs/feature/inventories" },
-            { text: "Player UUID", link: "/docs/feature/player-uuid" },
-            { text: "Player Skin", link: "/docs/feature/player-skin" },
-            { text: "Advancements", link: "/docs/feature/advancements" },
-            { text: "Map Rendering", link: "/docs/feature/map-rendering" },
-            { text: "Locator Bar", link: "/docs/feature/locator-bar" },
-            { text: "Changing the MOTD", link: "/docs/feature/motd" },
-            { text: "Open to LAN", link: "/docs/feature/open-to-lan" },
-          ],
-        },
-        {
-          "text": "Compatibility",
-          "items": [
-            { "text": "Proxies", "link": "/docs/compatibility/proxies" },
-            { "text": "Unsupported Versions", "link": "/docs/compatibility/unsupported-versions" }
-          ]
-        },
-        {
-          text: "Thread Architecture",
-          items: [
-            {
-              text: "Thread Safety in the JVM",
-              link: "/docs/thread-architecture/thread-safety",
+                text: "Wiki",
+                link: "/docs/getting-started/introduction"
             },
             {
-              text: "Acquirable API",
-              link: "/docs/thread-architecture/acquirable-api",
-              items: [
-                {
-                  text: "The Inside",
-                  link: "/docs/thread-architecture/acquirable-api/inside-the-api",
-                },
-              ],
+                text: "Javadoc",
+                link: "https://javadoc.minestom.net"
             },
-          ],
-        },
-      ],
+        ],
+
+        socialLinks: [
+            {
+                icon: "github",
+                link: "https://github.com/Minestom/Minestom",
+            },
+            {
+                icon: "discord",
+                link: "https://discord.gg/fpY6kPUkZb",
+            },
+        ],
     },
-    socialLinks: [
-      {
-        icon: "github",
-        link: "https://github.com/minestom/Minestom",
-      },
-      {
-        icon: "discord",
-        link: "https://discord.gg/pkFRvqB",
-      },
+
+    buildEnd(siteConfig) {
+        writeRedirects(siteConfig.outDir);
+    },
+
+    vite: {
+        plugins: [redirectsPlugin()],
+    },
+}, [{
+    documentRootPath: "/",
+    scanStartPath: "docs",
+    resolvePath: "/docs/",
+    useTitleFromFileHeading: true,
+    useTitleFromFrontmatter: true,
+    useFolderTitleFromIndexFile: true,
+    useFolderLinkFromIndexFile: true,
+    hyphenToSpace: true,
+    capitalizeFirst: true,
+
+    manualSortFileNameByPriority: [
+        "getting-started",
+        "introduction.md",
+        "what-is-minestom.md",
+        "when-to-use.md",
+        "dependencies.md",
+        "your-first-server.md",
+
+        "world",
+        "instances.md",
+        "chunk-management",
+        "anvilloader.md",
+        "lighting.md",
+        "blocks.md",
+        "coordinates.md",
+        "generation.md",
+        "batch.md",
+
+        "feature",
+        "adventure.md",
+        "serialization",
+        "codecs.md",
+        "network-buffers.md",
+        "items.md",
+        "events.md",
+        "player-capabilities.md",
+        "entities",
+        "ai.md",
+        "tags.md",
+        "schedulers.md",
+        "commands.md",
+        "inventories.md",
+        "player-uuid.md",
+        "player-skin.md",
+        "advancements.md",
+        "map-rendering.md",
+        "locator-bar.md",
+        "motd.md",
+        "open-to-lan.md",
+
+        "compatibility",
+        "proxies.md",
+        "unsupported-versions.md",
+
+        "thread-architecture",
+        "thread-safety.md",
+        "acquirable-api",
+        "inside-the-api.md",
     ],
-  },
-});
+}]);
+
+for (const group of Object.values(config.themeConfig.sidebar as Record<string, any>)) {
+    normalizeSidebar(group.items);
+}
+
+export default defineConfig(config);

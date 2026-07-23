@@ -1,0 +1,7 @@
+{
+    "files.exclude": {
+        ".vitepress/dist": true,
+        ".vitepress/cache": true,
+        "node_modules": true
+    }
+}

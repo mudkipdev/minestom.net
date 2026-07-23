@@ -1,5 +1,6 @@
 ---
-description: Describes how to add Minestom as a dependency in your project.
+title: Dependencies
+description: How to add Minestom as a dependency in your project.
 ---
 
 <script setup>
@@ -27,57 +28,36 @@ onMounted(() => {
 
 # Dependencies
 
-::: note
-Minestom needs Java 25 or newer in order to run. If you are using Gradle, you must use version 9.1 or higher. If you are using IntelliJ IDEA, you must use 2025.2 or higher.
+::: info
+Minestom requires Java 25 or newer. Gradle users need 9.1 or higher, and IntelliJ IDEA users need 2025.2 or higher.
 :::
 
-Adding Minestom to your Java project is done just like a normal library.
+Minestom is published to Maven Central, so you add it the same way as any other Java library.
 
-## Repositories
+::: code-group
 
-:::tabs
-== Gradle (Groovy)
-
-```groovy
+```kotlin-vue [Gradle (Kotlin)]
 repositories {
     mavenCentral()
 }
-```
 
-== Gradle (Kotlin)
-
-```kotlin
-repositories {
-    mavenCentral()
-}
-```
-
-:::
-
-## Dependencies
-
-:::tabs
-== Gradle (Groovy)
-
-```groovy-vue
-dependencies {
-    implementation 'net.minestom:minestom:{{ version }}'
-}
-```
-
-== Gradle (Kotlin)
-
-```kotlin-vue
 dependencies {
     implementation("net.minestom:minestom:{{version}}")
 }
 ```
 
-== Maven
+```groovy-vue [Gradle (Groovy)]
+repositories {
+    mavenCentral()
+}
 
-```xml-vue
+dependencies {
+    implementation 'net.minestom:minestom:{{ version }}'
+}
+```
+
+```xml-vue [Maven]
 <dependencies>
-    <!-- ... -->
     <dependency>
         <groupId>net.minestom</groupId>
         <artifactId>minestom</artifactId>
@@ -88,15 +68,15 @@ dependencies {
 
 :::
 
-The version string for the master branches are always the latest github release name.
+Release versions are named after the matching GitHub release. A `net.minestom:testing` artifact is published alongside each release, which provides helpers for integration testing your server.
 
-Minestom PR branches are also published and can be used to preview upcoming features. You can enable them with
+## Snapshots
 
-:::tabs
+Pull request branches are published as snapshots, so you can try upcoming features before they are released. The version is `<branch>-SNAPSHOT`, and the master branch is published as `master-SNAPSHOT`.
 
-== Gradle (Kotlin)
+::: code-group
 
-```kotlin-vue
+```kotlin [Gradle (Kotlin)]
 repositories {
     maven(url = "https://central.sonatype.com/repository/maven-snapshots/") {
         content { // This filtering is optional, but recommended

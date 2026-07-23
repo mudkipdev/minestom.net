@@ -5,14 +5,14 @@ layout: home
 hero:
   name: "Minestom"
   text: ''
-  tagline: An open-source, lightweight Minecraft server built from the ground up.
+  tagline: The open-source, lightweight Minecraft server built from the ground up.
   image:
     src: /minestom-logo-lg.png
     alt: Minestom Logo
   actions:
     - theme: brand
       text: Quick Start
-      link: /docs/introduction
+      link: /docs/getting-started/introduction
     - theme: alt
       text: GitHub
       link: https://github.com/Minestom/Minestom

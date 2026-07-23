@@ -45,7 +45,7 @@ PlayerData decodedData = PlayerData.CODEC.decode(Transcoder.JSON, json).orElseTh
 | `Codec.COMPONENT_STYLE` | `Style`             | Adventure text style                                                                      |
 | `Codec.RAW_VALUE`       | `RawValue`          | Format-agnostic raw value (see [Converting Between Formats](#converting-between-formats)) |
 
-:::note
+::: info
 Codecs for game types are often defined on their respective classes rather than on `Codec` directly, such as `ItemStack.CODEC`.
 :::
 

@@ -13,16 +13,38 @@ Minestom supports the following proxies and their derivatives:
 
 Connecting via a proxy *replaces* the auth argument in `MinecraftServer.init()`.
 
-:::tabs
-== Velocity
-```java
+Vanilla BungeeCord does not support tokens, so is ill-advised to use stock. Secret exchanges can be implemented using [BungeeGuard](https://github.com/lucko/BungeeGuard), you should **never** use BungeeCord without it.
+
+::: code-group
+
+```java [Velocity]
 new Auth.Velocity("secret_here")
 
 // example
 MinecraftServer server = MinecraftServer.init(new Auth.Velocity("secret_here"));
 ```
 
-```toml
+```java [Gate]
+new Auth.Velocity("secret_here")
+
+// example
+MinecraftServer server = MinecraftServer.init(new Auth.Velocity("secret_here"));
+```
+
+```java [BungeeCord]
+new Auth.Bungee(Set.of("secret", "here"))
+
+// example
+MinecraftServer server = MinecraftServer.init(new Auth.Bungee(Set.of("secret", "here")));
+```
+
+:::
+
+The matching change on the proxy side:
+
+::: code-group
+
+```toml [Velocity]
 # Should we forward IP addresses and other data to backend servers?
 # Available options:
 # - "none":        No forwarding will be done. All players will appear to be connecting
@@ -38,15 +60,7 @@ player-info-forwarding-mode = "NONE" // [!code --]
 player-info-forwarding-mode = "MODERN" // [!code ++]
 ```
 
-== Gate
-```java
-new Auth.Velocity("secret_here")
-
-// example
-MinecraftServer server = MinecraftServer.init(new Auth.Velocity("secret_here"));
-```
-
-```yaml
+```yaml [Gate]
 # This allows you to customize how player information such as IPs and UUIDs are forwarded to your server.
 # See the documentation for more information.
 forwarding:
@@ -60,20 +74,11 @@ forwarding:
   #bungeeGuardSecret: secret_here
 ```
 
-== BungeeCord
-Vanilla BungeeCord does not support tokens, so is ill-advised to use stock. Secret exchanges can be implemented using [BungeeGuard](https://github.com/lucko/BungeeGuard), you should **never** use BungeeCord without it. The following enables BungeeCord and BungeeGuard support:
-
-```java
-new Auth.Bungee(Set.of("secret", "here"))
-
-// example
-MinecraftServer server = MinecraftServer.init(new Auth.Bungee(Set.of("secret", "here")));
-```
-
-```yaml
+```yaml [BungeeCord]
 ip_forward: false # [!code --]
 ip_forward: true # [!code ++]
 ```
+
 :::
 
 ## Transferring between servers
@@ -83,19 +88,19 @@ To transfer players, you need inform the proxy to do so. You can either do this 
 ### Using the BungeeCord plugin message channel
 All supported proxies should have the BungeeCord plugin message channel enabled by default.
 
-:::tabs
-== Velocity
-```toml
+::: code-group
+
+```toml [Velocity]
 # Enables BungeeCord plugin messaging channel support on Velocity.
 bungee-plugin-message-channel = true
 ```
 
-== Gate
-```yaml
+```yaml [Gate]
 # Whether the proxy should support bungee plugin channels.
 # (Disable this if your backend servers are untrusted.)
 bungeePluginChannelEnabled: true
 ```
+
 :::
 
 ```java
