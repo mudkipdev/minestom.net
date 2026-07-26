@@ -92,7 +92,7 @@ The builder supports:
 - `expireCount(int)`: Remove the listener after N calls
 - `expireWhen(Predicate)`: Remove the listener when a condition becomes true
 - `filter(Predicate)`: Only call the handler if the predicate passes
-- `ignoreCancelled(boolean)`: Whether to skip cancelled events (default: true)
+- `ignoreCancelled(boolean)`: Whether to skip canceled events (default: true)
 
 #### Type safety
 
@@ -183,7 +183,7 @@ You can freely implement the `Event` interface to model custom events. Traits li
 
 ## Event traits
 
-### Cancellable events
+### Cancelable events
 
 Some events implement `CancellableEvent`, which allows listeners to cancel the event and prevent further processing.
 
@@ -195,18 +195,18 @@ node.addListener(PlayerMoveEvent.class, event -> {
 });
 ```
 
-When an event is cancelled, subsequent listeners on the same node will still run by default. However, you can configure a listener to skip cancelled events:
+When an event is canceled, subsequent listeners on the same node will still run by default. However, you can configure a listener to skip canceled events:
 
 ```java
 node.addListener(EventListener.builder(PlayerMoveEvent.class)
-    .ignoreCancelled(false) // This listener runs even if the event was cancelled
+    .ignoreCancelled(false) // This listener runs even if the event was canceled
     .handler(event -> {
-        System.out.println("This runs even for cancelled moves");
+        System.out.println("This runs even for canceled moves");
     })
     .build());
 ```
 
-Note that by default, `ignoreCancelled` is `true`, meaning most listeners will not run if the event has been cancelled by an earlier listener.
+Note that by default, `ignoreCancelled` is `true`, meaning most listeners will not run if the event has been canceled by an earlier listener.
 
 ### Recursive events
 

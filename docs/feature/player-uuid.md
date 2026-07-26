@@ -15,7 +15,7 @@ MinecraftServer.getConnectionManager().setPlayerProvider((connection, gameProfil
 
 ## Custom Player class
 
-Setting the Player Provider allows you to create a custom `Player` class, this is useful if you want to override default behaviour.
+Setting the Player Provider allows you to create a custom `Player` class, this is useful if you want to override default behavior.
 
 For example:
 
